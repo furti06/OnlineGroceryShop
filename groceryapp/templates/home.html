@@ -1,0 +1,23 @@
+{% extends 'navigation.html' %}
+{% load static %}
+{% block body %}
+<style>
+    img{
+        height:570px;
+        weight: 100px;
+    }
+    .carousel-caption {
+        background-color: rgba(0,0,0,0.5);
+    }
+</style>
+
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{% static 'images/online1.jpg' %}" class="d-block w-100" alt="50">
+      <div class="carousel-caption d-none d-md-block">
+        <h3>KMart</h3>
+        <p1>Welcome to KMart Grocery Shop</p1>
+      </div>
+    </div>
+  </div>
+{% endblock %}

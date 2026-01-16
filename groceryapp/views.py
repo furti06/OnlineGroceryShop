@@ -472,3 +472,4 @@ def admin_change_password(request):
             messages.success(request, "Invalid Password")
             return redirect('admin_change_password')
     return render(request, 'admin_change_password.html')
+

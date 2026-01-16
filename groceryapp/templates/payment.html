@@ -1,8 +1,247 @@
-<html>
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Payment Page|Online Grocery</title>
-    <link rel="stylesheet" href="{% static 'css/payment.css' %}"/>
+    <meta charset="UTF-8">
+    <title>Payment Page | Online Grocery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+          integrity="sha384-jLKHWMZzH+LzJ+vQaeef6Unf6AnH4+2gkXxELz1dE1q+OOHT3VZ9m+hY0PrzQ5pG" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/mystyle.css' %}">
+
+    <style>
+        body {
+            font-family: 'Ubuntu', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        main.container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .main {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        /* =============================
+           Payment Method Section
+        ============================= */
+        .payment_method {
+            flex: 1;
+            min-width: 320px;
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .ship_head {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #27ae60; /* Green header */
+            text-align: center;
+        }
+
+        .card_info form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .card_head {
+            margin-bottom: 1rem;
+        }
+
+        .card_title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #10b981;
+        }
+
+        .card_types {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card_img {
+            width: 50px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .card_info input {
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card_info input:focus {
+            border-color: #34d399;
+            box-shadow: 0 0 6px rgba(52, 211, 153, 0.4);
+            outline: none;
+        }
+
+        .card_info div input {
+            width: 48%;
+        }
+
+        .save_card {
+            font-size: 0.9rem;
+            color: #10b981;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .confirm_btn {
+            background-color: #10b981;
+            color: #fff;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .confirm_btn:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+
+        /* =============================
+           E-Payment Section
+        ============================= */
+        .e_payment {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .pay img {
+            width: 60px;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .pay img:hover {
+            transform: scale(1.1);
+        }
+
+        /* =============================
+           Order Summary Section
+        ============================= */
+        .order_summary {
+            flex: 1;
+            min-width: 320px;
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .order_head {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #27ae60;
+            text-align: center;
+        }
+
+        .order_price {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .order_price .price {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            padding: 0.3rem 0;
+        }
+
+        .order_price .total_price {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-top: 1px solid #ddd;
+            padding-top: 0.5rem;
+        }
+
+        .qr_code {
+            width: 100px;
+            height: 100px;
+            margin: 1rem auto;
+            display: block;
+        }
+
+        .condition {
+            text-align: center;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .review_btn {
+            background-color: #10b981;
+            color: #fff;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: auto;
+        }
+
+        .review_btn:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+
+        /* =============================
+           Responsive
+        ============================= */
+        @media (max-width: 768px) {
+            .main {
+                flex-direction: column;
+            }
+
+            .card_info div input {
+                width: 100%;
+            }
+
+            .card_types {
+                justify-content: space-between;
+            }
+        }
+    </style>
 </head>
 <body>
 <main class="container">
@@ -17,16 +256,16 @@
                         <h2 class="card_title">Debit or Credit Card</h2>
                     </div>
                     <div class="card_types">
-                        <img class="card_img" src="https://cdn-icons-png.flaticon.com/512/349/349221.png" alt=""/>
-                        <img class="card_img" src="https://cdn-icons-png.flaticon.com/512/349/349230.png" alt=""/>
-                        <img class="card_img" src="https://cdn-icons-png.flaticon.com/512/349/349228.png" alt=""/>
-                        <img class="card_img" src="https://img.icons8.com/fluency/512/mastercard.png" alt=""/>
+                        <img class="card_img" src="https://cdn-icons-png.flaticon.com/512/349/349221.png" alt="Visa"/>
+                        <img class="card_img" src="https://cdn-icons-png.flaticon.com/512/349/349230.png" alt="Amex"/>
+                        <img class="card_img" src="https://cdn-icons-png.flaticon.com/512/349/349228.png" alt="Discover"/>
+                        <img class="card_img" src="https://img.icons8.com/fluency/512/mastercard.png" alt="Mastercard"/>
                     </div>
-                    <input type="text" name="holder_name" value="" placeholder="Card Holder" maxlength="60"/>
-                    <input type="text" name="number" value="" placeholder="Card Number" maxlength="16"/>
+                    <input type="text" name="holder_name" placeholder="Card Holder" maxlength="60"/>
+                    <input type="text" name="number" placeholder="Card Number" maxlength="16"/>
                     <div>
-                        <input type="text" name="expiry" value="" placeholder="Expire" maxlength="5"/>
-                        <input type="text" name="cvc" value="" placeholder="CVC" maxlength="3"/>
+                        <input type="text" name="expiry" placeholder="Expire" maxlength="5"/>
+                        <input type="text" name="cvc" placeholder="CVC" maxlength="3"/>
                     </div>
                     <span class="save_card">Save Card</span>
                     <button type="submit" class="confirm_btn">Confirm</button>
@@ -34,17 +273,17 @@
             </div>
             <div class="e_payment">
                 <div class="pay">
-                    <img src="https://cdn-icons-png.flaticon.com/512/6124/6124998.png" alt=""/>
+                    <img src="https://cdn-icons-png.flaticon.com/512/6124/6124998.png" alt="Bkash"/>
                 </div>
                 <div class="pay">
-                    <img src="https://cdn-icons-png.flaticon.com/512/5977/5977576.png" alt=""/>
+                    <img src="https://cdn-icons-png.flaticon.com/512/5977/5977576.png" alt="Nagad"/>
                 </div>
                 <div class="pay">
-                    <img src="https://cdn-icons-png.flaticon.com/512/196/196565.png" alt=""/>
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196565.png" alt="Rocket"/>
                 </div>
             </div>
-
         </section>
+
         <!-- Order Summary Section  -->
         <section class="order_summary">
             <h2 class="order_head">Order Summary</h2>
@@ -62,14 +301,13 @@
                     <p>Tax:</p>
                     <p>0.00</p>
                 </div>
-                <br/>
                 <hr/>
                 <div class="total_price">
                     <p class="dark">Total:</p>
-                    <p class="dark">Tk.{{request.GET.discounted|floatformat:2}}</p>
+                    <p class="dark">TK.{{request.GET.discounted|floatformat:2}}</p>
                 </div>
             </div>
-            <img class="qr_code" src="https://cdn-icons-png.flaticon.com/512/714/714390.png" alt=""/>
+            <img class="qr_code" src="https://cdn-icons-png.flaticon.com/512/714/714390.png" alt="QR Code"/>
             <p class="condition">
                 Pay and Confirm Order by QR Code Using <b>Mobile Application</b>
             </p>
@@ -78,5 +316,4 @@
     </div>
 </main>
 </body>
-
 </html>

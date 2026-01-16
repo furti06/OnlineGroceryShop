@@ -2,52 +2,187 @@
 {% load static %}
 <html lang="en">
 <head>
-    <title>My Order</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - KMart</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/mystyle.css' %}">
+
+    <style>
+        body {
+            background-color: #f0f8f5;
+            font-family: 'Ubuntu', sans-serif;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        h3 {
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1e7e34;
+        }
+
+        /* Card */
+        #myorder {
+            border-radius: 14px;
+            overflow: hidden;
+            border: none;
+        }
+
+        /* Table */
+        #myorder table {
+            margin-bottom: 0;
+        }
+
+        #myorder th,
+        #myorder td {
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        #myorder thead th {
+            background-color: #28a745;
+            color: #fff;
+            font-weight: 600;
+            border: none;
+        }
+
+        #myorder tbody tr:hover {
+            background-color: #f6fffa;
+        }
+
+        /* Buttons */
+        .status-btn {
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #28a745;
+            color: #28a745;
+            background: #fff;
+        }
+
+        .status-btn:hover {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .btn-cancel {
+            background-color: #dc3545;
+            border: none;
+            color: #fff;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            padding: 0;
+        }
+
+        .btn-return {
+            background-color: #ffc107;
+            border: none;
+            color: #000;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            padding: 0;
+        }
+
+        .btn i {
+            font-size: 14px;
+        }
+
+        /* Mobile */
+        @media (max-width: 767px) {
+            h3 {
+                font-size: 18px;
+            }
+
+            #myorder th,
+            #myorder td {
+                font-size: 12px;
+                padding: 8px 6px;
+            }
+
+            .status-btn {
+                font-size: 12px;
+                padding: 3px 8px;
+            }
+        }
+    </style>
 </head>
 <body>
+
 {% include 'navigation.html' %}
-<hr class="mt-0">
-<div class="card shadow m-5" id="myorder">
-    <div class="card-body">
-        <div class="container-fluid">
-            <h3 style="font-family:roman">My Order</h3>
-            <table class="table table-bordered" style="width:100%">
-                <thead>
-                <tr>
-                    <th>SN</th>
-                    <th>BookingID</th>
-                    <th>TotalPrice</th>
-                    <th>Status</th>
-                    <th>CreationDate</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for i in order %}
-                <tr>
-                    <td>{{forloop.counter}}</td>
-                    <td>{{i.id}}</td>
-                    <td>{{i.total}}</td>
-                    <td><a href="/user-order-track/{{i.id}}/" class="btn btn-primary" title="Track Status">{{i.get_status_display}}</a></td>
-                    <td>{{i.created}}</td>
-                    <td>
-                        {% if i.status < 4 %}
-                          <a href="/change-order-status/{{i.id}}/?status=5" class="btn btn-success" title="Cancel Order"><i class="fa-solid fa-xmark"></i></a>
-                        {% endif %}
-                        {% if i.status == 4 %}
-                            <a href="/change-order-status/{{i.id}}/?status=6" class="btn btn-danger" title="Return Order"><i class="fa-solid fa-refresh"></i></a>
-                        {% endif %}
-                        {% if i.status == 5 or i.status == 6 %}
-                            -----
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+
+<div class="container">
+    <div class="card shadow-sm mb-4" id="myorder">
+        <div class="card-body p-3">
+            <h3>My Orders</h3>
+
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>Order ID</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in order %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>#{{ i.id }}</td>
+                            <td><strong>TK {{ i.total }}</strong></td>
+                            <td>
+                                <a href="/user-order-track/{{ i.id }}/"
+                                   class="status-btn">
+                                    {{ i.get_status_display }}
+                                </a>
+                            </td>
+                            <td>{{ i.created }}</td>
+                            <td>
+                                {% if i.status < 4 %}
+                                    <a href="/change-order-status/{{ i.id }}/?status=5"
+                                       class="btn btn-cancel"
+                                       title="Cancel Order">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </a>
+                                {% elif i.status == 4 %}
+                                    <a href="/change-order-status/{{ i.id }}/?status=6"
+                                       class="btn btn-return"
+                                       title="Return Order">
+                                        <i class="fa-solid fa-refresh"></i>
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
 </div>
+
 </body>
 </html>

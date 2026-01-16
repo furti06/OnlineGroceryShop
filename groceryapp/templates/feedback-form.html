@@ -1,61 +1,142 @@
 {% load static %}
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>Feedback Form</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f0f8f5; /* light green background */
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        label {
+            color: #1e7e34; /* dark green */
+            font-weight: 600;
+        }
+
+        hr {
+            border-top: 1px solid #dfeee7;
+        }
+
+        /* Card styling */
+        .card {
+            border-radius: 15px;
+            border: 1px solid #dfeee7;
+            background-color: #ffffff;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        /* Header */
+        h5 {
+            border-bottom: 2px solid #28a745 !important;
+            color: #1e7e34 !important;
+            font-weight: 700;
+        }
+
+        /* Inputs */
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #cfe9dc;
+        }
+
+        .form-control:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.15rem rgba(40, 167, 69, 0.25);
+        }
+
+        /* Submit button */
+        .btn-primary {
+            background-color: #28a745;
+            border-color: #28a745;
+            border-radius: 8px;
+            text-transform: capitalize;
+        }
+
+        .btn-primary:hover {
+            background-color: #1e7e34;
+            border-color: #1e7e34;
+        }
+
+        /* Mobile spacing */
+        @media (max-width: 768px) {
+            .card {
+                margin: 20px !important;
+            }
+        }
+    </style>
 </head>
-<style>
-    label{
-        color:black;
-    }
-</style>
+
 <body>
 {% include 'navigation.html' %}
 <hr class="mt-0">
+
 <div class="card shadow m-5">
     <div class="card-body">
         <div class="container-fluid">
-            <h5 class="p-2" style="border-bottom: 2px solid orange;color:green">Feedback Form</h5>
+            <h5 class="p-2 mb-4">Feedback Form</h5>
+
             <form method="post" action="" name="feedback">
                 {% csrf_token %}
                 <div class="form-row">
+
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="fname">First Name</label>
-                            <input type="text" name="fname" id="fname" placeholder="Enter First Name" value="{{user.user.first_name}}" readonly class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Last Name</label>
-                            <input type="text" name="lname" value="{{user.user.last_name}}" placeholder="Enter Last Name" readonly class="form-control">
+                            <input type="text" name="fname" id="fname"
+                                   value="{{ user.user.first_name }}"
+                                   readonly class="form-control">
                         </div>
                     </div>
 
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" name="lname"
+                                   value="{{ user.user.last_name }}"
+                                   readonly class="form-control">
+                        </div>
+                    </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Email ID</label>
-                            <input type="email" name="email" placeholder="Email Address" value="{{user.user.username}}" readonly class="form-control">
+                            <input type="email" name="email"
+                                   value="{{ user.user.username }}"
+                                   readonly class="form-control">
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="contact">Contact</label>
-                            <input type="text" name="mobile" placeholder="Contact Number" value="{{user.mobile}}" readonly required
-                                   class="form-control">
+                            <input type="text" name="mobile"
+                                   value="{{ user.mobile }}"
+                                   readonly required class="form-control">
                         </div>
                     </div>
-
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Write your feedback</label>
-                            <textarea name="feedback" class="form-control" placeholder="Write your feedback" ></textarea>
+                            <textarea name="feedback"
+                                      class="form-control"
+                                      rows="4"
+                                      placeholder="Write your feedback"></textarea>
                         </div>
                     </div>
+
                 </div>
-                <input type="submit" value="send feedback" class="m-2 px-3 btn btn-primary">
+
+                <input type="submit"
+                       value="Send Feedback"
+                       class="m-2 px-4 btn btn-primary">
             </form>
         </div>
     </div>

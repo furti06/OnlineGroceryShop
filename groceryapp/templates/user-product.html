@@ -1,12 +1,15 @@
 {% include 'navigation.html' %}
 {% load static custom_tags %}
 <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
+
 <div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
     <div class="bg-light border-right" id="sidebar-wrapper">
         <div class="sidebar-heading">Start Filtering</div>
         <div class="list-group list-group-flush">
             <a href="{% url 'user_product' 0 %}" class="list-group-item list-group-item-action bg-light">
-                All Product</a>
+                All Products</a>
             {% for i in allcategory %}
             <a href="{% url 'user_product' i.id %}" class="list-group-item list-group-item-action bg-light">
                 {{i.name}}</a>
@@ -14,58 +17,89 @@
         </div>
     </div>
 
+    <!-- Page Content -->
     <div id="page-content-wrapper">
+
+        <!-- Top Navbar with search -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
             <button class="btn btn-primary" id="menu-toggle">
                 <i class="fa fa-bars"></i>
             </button>
-            <h4 style="color:red;margin-left:30%">
-                View {{category.name}} Product</h4>
+            <h4 class="ml-3 text-danger">View {{category.name}} Product</h4>
+
+            <!-- Search input -->
+            <form class="form-inline ml-auto my-2 my-lg-0">
+                <input class="form-control mr-sm-2" id="productSearch" type="search" placeholder="Search products..."
+                       aria-label="Search">
+            </form>
         </nav>
-        <div class="container-fluid mt-2">
-            <div class="container-fluid">
-                <div class="row w-100 mx-auto">
-                    {% for j in product %}
-                    <div class="col-md-3">
-                        <div class="card" align="center" style="border:1px solid lightgrey">
-                            <img class="card-img-top img-thumbnail" src="{{j.image.url}}" style="width:100%;height:220px"
-                            <img class="card-img-top img-thumbnail" src="{{j.image.url}}" style="width:100%;height:220px"
-                                 alt="card-img">
-                            <div class="card-body">
-                                <h6 class="card-title">{{j.name}} TK.
-                                    <del>{{j.price}}</del>
-                                    {{j.id|applydiscount}}
-                                </h6>
-                                <p class="card-text" style="font-size:14px">{{j.description}}</p>
-                                <a href="/add-to-cart/{{j.id}}/" class="btn btn-primary">
-                                    <i class="fa fa-shopping-cart"></i> Add to cart
+
+        <!-- Product Grid -->
+        <div class="container-fluid mt-3">
+            <div class="row" id="productGrid">
+                {% for j in product %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-3 product-card">
+                    <div class="card h-100 text-center shadow-sm" style="border:1px solid #ddd;">
+                        <img class="card-img-top img-thumbnail" src="{{j.image.url}}"
+                             style="width:100%; height:220px; object-fit:cover;" alt="Product Image">
+                        <div class="card-body p-2">
+                            <h6 class="card-title">
+                                {{j.name}} TK. <del>{{j.price}}</del> {{j.id|applydiscount}}
+                            </h6>
+                            <p class="card-text text-truncate" style="font-size:14px;">{{j.description}}</p>
+                            <div class="d-flex justify-content-center">
+                                <a href="/add-to-cart/{{j.id}}/" class="btn btn-primary btn-sm mr-1">
+                                    <i class="fa fa-shopping-cart"></i>
                                 </a>
-                                <a href="/product-detail/{{j.id}}/" class="btn btn-warning">
-                                    <i class="fa fa-info" style="font-size:22px"></i>
+                                <a href="/product-detail/{{j.id}}/" class="btn btn-warning btn-sm">
+                                    <i class="fa fa-info" style="font-size:16px"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
-                    {% empty %}
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <img src="{% static 'images/empty.jpg' %}"/>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
                 </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <img src="{% static 'images/empty.jpg' %}" class="img-fluid" alt="No products">
+                            <h5 class="mt-2">No products found</h5>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
+
     </div>
 </div>
-</div>
 
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  $("#menu-toggle").click(function(e) {
-    e.preventDefault();
-    $("#wrapper").toggleClass("toggled");
-  });
+    // Toggle sidebar
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
 
+    // Product search
+    $("#productSearch").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#productGrid .product-card").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
 </script>
+
+<!-- Optional: Mobile card adjustments -->
+<style>
+@media (max-width: 767px) {
+    .product-card .card-body h6 {
+        font-size: 14px;
+    }
+    .product-card .card-text {
+        font-size: 12px;
+    }
+}
+</style>

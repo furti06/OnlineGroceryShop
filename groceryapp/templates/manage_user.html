@@ -1,39 +1,84 @@
 {% extends 'admin_base.html' %}
 {% block main %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <div class="card shadow">
     <div class="card-body">
-        <h5 class="p-2" style="border-bottom: 2px solid orange;">All Registered User</h5>
-        <div class="container-fluid">
-            <table class="table table-bordered table-sm" id="example">
-                <thead>
-                <tr>
-                    <th>S.No.</th>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Mobile</th>
-                    <th>Action</th>
-                </tr>
+        <h5 class="p-2" style="border-bottom: 2px solid orange;">All Registered Users</h5>
+
+        <!-- Desktop Table -->
+        <div class="table-responsive d-none d-md-block">
+            <table class="table table-bordered table-hover table-sm">
+                <thead class="thead-light">
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Action</th>
+                    </tr>
                 </thead>
                 <tbody>
                 {% for i in userprofile %}
-                <tr>
-                    <td>{{forloop.counter}}</td>
-                    <td><img src="{{i.image.url}}" style="width:80px;height:80px"/></td>
-                    <td>{{i.user.first_name}} {{i.user.last_name}}</td>
-                    <td>{{i.user.username}}</td>
-                    <td>{{i.mobile}}</td>
-                    <td>
-                        <a href="/delete-user/{{i.user.id}}/" class="btn btn-danger"
-                           onclick="return confirm('Are You Sure?')">
-                            <i class="fas fa-trash-alt"></i>
-                        </a></td>
-                </tr>
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><img src="{{ i.image.url }}" style="width:60px; height:60px; border-radius:50%; object-fit:cover;"></td>
+                        <td>{{ i.user.first_name }} {{ i.user.last_name }}</td>
+                        <td>{{ i.user.username }}</td>
+                        <td>{{ i.mobile }}</td>
+                        <td>
+                            <a href="/delete-user/{{ i.user.id }}/" class="btn btn-danger btn-sm"
+                               onclick="return confirm('Are You Sure?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
+
+        <!-- Mobile Cards -->
+        <div class="d-block d-md-none">
+            {% for i in userprofile %}
+            <div class="card mb-3 shadow-sm">
+                <div class="row no-gutters align-items-center">
+                    <div class="col-4 text-center">
+                        <img src="{{ i.image.url }}" class="img-fluid rounded-circle my-2" style="width:80px; height:80px; object-fit:cover;">
+                    </div>
+                    <div class="col-8">
+                        <div class="card-body p-2">
+                            <h6 class="card-title mb-1">{{ i.user.first_name }} {{ i.user.last_name }}</h6>
+                            <p class="mb-1"><strong>Email:</strong> {{ i.user.username }}</p>
+                            <p class="mb-1"><strong>Mobile:</strong> {{ i.mobile }}</p>
+                            <div class="d-flex justify-content-start mt-1">
+                                <a href="/delete-user/{{ i.user.id }}/" class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Are You Sure?')">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
     </div>
 </div>
+
+<!-- Optional CSS for mobile card adjustments -->
+<style>
+.card-body h6 {
+    font-weight: 600;
+}
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+</style>
+
 {% endblock %}

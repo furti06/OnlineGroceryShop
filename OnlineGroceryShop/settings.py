@@ -107,13 +107,13 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),  # optional if you have a main static folder
 ]
-STATIC_ROOT = str(BASE_DIR / 'staticfiles')  # PythonAnywhere will serve from here
+STATIC_ROOT = '/home/furtiii/groceryshop/static'  # PythonAnywhere will serve from here
 
 # =====================
 # Media files (uploads)
 # =====================
 MEDIA_URL = '/media/'
-MEDIA_ROOT = str(BASE_DIR / 'mediafiles')  # PythonAnywhere will serve media files from here
+MEDIA_ROOT = '/home/furtiii/groceryshop/media'  # PythonAnywhere will serve media files from here
 
 # =====================
 # Default primary key

@@ -3,124 +3,132 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ product.name }} | Product Detail</title>
+    <title>Product Detail</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS -->
     <link href="{% static 'css/product-detail.css' %}" rel="stylesheet"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet"/>
+    <link href="https://w3learnpoint.com/cdn/jquery-picZoomer.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" rel="stylesheet"/>
 
-    <!-- Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
-
 <body>
 {% include 'navigation.html' %}
 
-<!-- ================= PRODUCT DETAIL ================= -->
-<section class="product-detail-section">
+<!-- Product Detail Section -->
+<section id="product-detail" class="section-bg">
     <div class="container">
+        <div class="col-12 text-center mb-4 title_bx">
+            <h3 class="title"><span class="header-title-1">Product</span><span class="header-title-2">Detail</span></h3>
+        </div>
 
-        <div class="product-card">
-            <div class="product-grid">
-
-                <!-- IMAGE -->
-                <div class="product-image-box">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <div class="row row-sm">
+            <!-- Left: Product Image -->
+            <div class="col-md-6 _boxzoom">
+                <div class="_product-images">
+                    <div class="picZoomer">
+                        <img class="my_img" src="{{ product.image.url }}"
+                             alt="{{ product.name }}" width="400" height="400">
+                    </div>
                 </div>
+            </div>
 
-                <!-- INFO -->
-                <div class="product-info">
-                    <h1 class="product-title">{{ product.name }}</h1>
+            <!-- Right: Product Info -->
+            <div class="col-md-6">
+                <div class="_product-detail-content">
+                    <p class="_p-name product-name">{{ product.name }}</p>
 
-                    <div class="price-box">
-                        <span class="old-price">৳ {{ product.price }}</span>
-                        <span class="new-price">৳ {{ product.id|applydiscount }}</span>
+                    <div class="_p-price-box mb-3">
+                        <span> M.R.P. : <del>{{ product.price }}</del> </span>
+                        <span class="price"> TK. {{ product.id|applydiscount }} </span>
                     </div>
 
-                    <div class="product-desc">
-                        <h4>Description</h4>
+                    <div class="_p-features mb-3">
+                        <span>Description:</span>
                         <p>{{ product.description }}</p>
                     </div>
 
-                    <a href="/add-to-cart/{{ product.id }}/" class="btn-add-cart">
-                        <i class="fa fa-cart-shopping"></i> Add to Cart
-                    </a>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-</section>
-
-<!-- ================= YOU MAY ALSO LIKE ================= -->
-<section class="related-section">
-    <div class="container">
-
-        <h2 class="section-title">You May Also Like</h2>
-
-        <!-- Desktop / Tablet Grid -->
-        <div class="related-grid">
-            {% for i in latest_product %}
-            <div class="related-card">
-                <a href="/product-detail/{{ i.id }}/">
-                    <img src="{{ i.image.url }}" alt="{{ i.name }}">
-                </a>
-
-                <div class="related-info">
-                    <h4>{{ i.name }}</h4>
-
-                    <div class="related-price">
-                        <span class="old">৳ {{ i.price }}</span>
-                        <span class="new">৳ {{ i.id|applydiscount }}</span>
+                    <div class="_p-qty-and-cart">
+                        <a href="/add-to-cart/{{ product.id }}/" class="btn btn-success btn-theme">
+                            <i class="fa fa-shopping-cart"></i> Add to Cart
+                        </a>
                     </div>
-
-                    <a href="/add-to-cart/{{ i.id }}/" class="mini-cart-btn">
-                        <i class="fa fa-cart-plus"></i>
-                    </a>
                 </div>
             </div>
-            {% endfor %}
         </div>
-
-        <!-- Mobile Slider -->
-        <div class="owl-carousel related-carousel">
-            {% for i in latest_product %}
-            <div class="related-card">
-                <a href="/product-detail/{{ i.id }}/">
-                    <img src="{{ i.image.url }}" alt="{{ i.name }}">
-                </a>
-
-                <div class="related-info">
-                    <h4>{{ i.name }}</h4>
-                    <span class="new">৳ {{ i.id|applydiscount }}</span>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-
     </div>
 </section>
 
-<!-- ================= MOBILE STICKY CART ================= -->
-<div class="mobile-cart-bar">
-    <span>৳ {{ product.id|applydiscount }}</span>
-    <a href="/add-to-cart/{{ product.id }}/">Add to Cart</a>
-</div>
+<!-- Recent Products Slider -->
+<section class="sec bg-light mt-5">
+    <div class="container">
+        <div class="col-12 title_bx mb-3">
+            <h3 class="title"> <span class="header-title-1">Recent</span><span class="header-title-2">Products</span></h3>
+        </div>
+
+        <div class="row">
+            <div class="col-12 list-slider">
+                <div class="owl-carousel owl-theme" id="recent_post">
+                    {% for i in latest_product %}
+                    <div class="item">
+                        <div class="sq_box shadow">
+                            <div class="pdis_img position-relative">
+                                <span class="wishlist">
+                                    <a href="javascript:void(0);" title="Add to Wish List">
+                                        <i class="fa fa-heart"></i>
+                                    </a>
+                                </span>
+                                <a href="/product-detail/{{ i.id }}/">
+                                    <img src="{{ i.image.url }}" alt="{{ i.name }}">
+                                </a>
+                            </div>
+                            <h4 class="mb-1">
+                                <a href="/product-detail/{{ i.id }}/">{{ i.name }}</a>
+                            </h4>
+                            <div class="price-box mb-2">
+                                <span class="price"> Price: {{ i.price }} </span>
+                                <span class="offer-price"> Offer: {{ i.id|applydiscount }} </span>
+                            </div>
+                            <div class="btn-box text-center">
+                                <a class="btn btn-sm btn-success" href="/add-to-cart/{{ i.id }}/">
+                                    <i class="fa fa-shopping-cart"></i> Add to Cart
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script src="{% static 'js/product-detail.js' %}"></script>
 
 <script>
-$(document).ready(function () {
-    $(".related-carousel").owlCarousel({
-        items: 2,
-        margin: 10,
+$(window).on('load', function() {
+    // Initialize PicZoomer after image loads
+    $(".picZoomer").picZoomer();
+
+    // Initialize OwlCarousel for recent products
+    $("#recent_post").owlCarousel({
         loop: true,
-        dots: true,
-        nav: false
+        margin: 10,
+        nav: true,
+        dots: false,
+        responsive: {
+            0: { items: 1 },
+            576: { items: 2 },
+            768: { items: 3 },
+            992: { items: 4 }
+        }
     });
 });
 </script>

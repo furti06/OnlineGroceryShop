@@ -12,24 +12,24 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# =====================
+# Base Directory
+# =====================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# =====================
+# Security
+# =====================
+# Replace this with your real secret key
+SECRET_KEY = 'django-insecure-e^dk-iw!p75aj8l5o0e^2ns*83b0(t*vh=diwtwt0$q&*i(3kt)'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e^dk-iw!p75aj8l5o0e^2ns*83b0(t*vh=diwtwt0$q&*i(3kt'
-
-# SECURITY WARNING: don't run with debug turned on in production!
+# Production settings
 DEBUG = False
+ALLOWED_HOSTS = ['furtiii.pythonanywhere.com']  # replace with your PythonAnywhere username domain
 
-ALLOWED_HOSTS = ['*']
-
-
+# =====================
 # Application definition
-
+# =====================
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,12 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'groceryapp',
+    'groceryapp',  # your custom app
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # optional, helps serve static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -56,7 +56,7 @@ ROOT_URLCONF = 'OnlineGroceryShop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [],  # add your templates folder if needed
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,10 +71,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'OnlineGroceryShop.wsgi.application'
 
-
+# =====================
 # Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
+# =====================
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -82,53 +81,51 @@ DATABASES = {
     }
 }
 
-
+# =====================
 # Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
-
+# =====================
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
-
+# =====================
 # Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
+# =====================
 LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'Asia/Dhaka'  # adjust if needed
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
+# =====================
+# Static files (CSS, JS)
+# =====================
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # if you have a main static folder
+    os.path.join(BASE_DIR, 'static'),  # optional if you have a main static folder
 ]
+STATIC_ROOT = str(BASE_DIR / 'staticfiles')  # PythonAnywhere will serve from here
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# =====================
+# Media files (uploads)
+# =====================
+MEDIA_URL = '/media/'
+MEDIA_ROOT = str(BASE_DIR / 'mediafiles')  # PythonAnywhere will serve media files from here
 
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
+# =====================
+# Default primary key
+# =====================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = Path.joinpath(BASE_DIR, 'media')
+# =====================
+# Optional: Security Enhancements
+# =====================
+# Uncomment these if using HTTPS for extra security
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+# SECURE_BROWSER_XSS_FILTER = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# X_FRAME_OPTIONS = 'DENY'

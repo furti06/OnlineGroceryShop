@@ -473,3 +473,65 @@ def admin_change_password(request):
             return redirect('admin_change_password')
     return render(request, 'admin_change_password.html')
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+
+@csrf_exempt
+@login_required
+def mobile_order_track(request):
+    """
+    Mobile app API for changing order status
+    Uses same Booking model & status logic as admin
+    """
+
+    if not request.user.is_staff:
+        return JsonResponse({
+            "success": False,
+            "error": "Unauthorized"
+        }, status=403)
+
+    if request.method == "POST":
+        order_id = request.POST.get('order_id')
+        direction = request.POST.get('direction')  # next / prev
+
+        if not order_id or not direction:
+            return JsonResponse({
+                "success": False,
+                "error": "Invalid data"
+            }, status=400)
+
+        try:
+            order = Booking.objects.get(id=order_id)
+        except Booking.DoesNotExist:
+            return JsonResponse({
+                "success": False,
+                "error": "Order not found"
+            }, status=404)
+
+        # Status update logic (same meaning as admin)
+        if direction == "next" and order.status < len(ORDERSTATUS):
+            order.status += 1
+        elif direction == "prev" and order.status > 1:
+            order.status -= 1
+
+        order.save()
+
+        return JsonResponse({
+            "success": True,
+            "new_status": order.status
+        })
+
+    return JsonResponse({
+        "success": False,
+        "error": "Invalid request method"
+    }, status=405)
+def admin_order_track_mobile(request, pid):
+    if not request.user.is_staff:
+        return redirect('admin_login')
+    order = Booking.objects.get(id=pid)
+    orderstatus = ORDERSTATUS
+    return render(request, 'admin-order-track-mobile.html', {
+        'order': order,
+        'orderstatus': orderstatus
+    })

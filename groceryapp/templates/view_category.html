@@ -1,38 +1,87 @@
 {% extends 'admin_base.html' %}
-{% block main  %}
+{% block main %}
 
-<div class="card shadow">
-    <div class="card-body">
+<div class="container-fluid py-4">
+    <h4 class="mb-3" style="border-bottom: 2px solid orange; padding-bottom: 5px;">All Categories</h4>
 
-        <h5 class="p-2" style="border-bottom: 2px solid orange;">All Category</h5>
-        <div class="container-fluid">
-
-            <table class="table table-bordered table-sm" id="example">
-                <thead>
-                <tr>
-                    <th>S. No.</th>
-                    <th>Category Name</th>
-                    <th>Creation Date</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for i in category %}
-                <tr>
-                    <td>{{forloop.counter}}</td>
-                    <td>{{i.name}}</td>
-                    <td>{{i.created}}</td>
-                    <td>
-                        <a href="{% url 'edit_category' i.id %}" class="text-success">Edit</a>
-                        <a href="/delete-category/{{i.id}}/" class="text-danger"
-                           onclick="return confirm('Are You Sure?')">Delete</a></td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+    <!-- Desktop Table -->
+    <div class="d-none d-md-block">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped table-sm">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>S. No.</th>
+                                <th>Category Name</th>
+                                <th>Creation Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in category %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{i.name}}</td>
+                                <td>{{i.created|date:"d M, Y"}}</td>
+                                <td>
+                                    <a href="{% url 'edit_category' i.id %}" class="btn btn-sm btn-success">Edit</a>
+                                    <a href="/delete-category/{{i.id}}/" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <!-- Mobile Cards -->
+    <div class="d-block d-md-none">
+        {% for i in category %}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <h6 class="mb-2"><strong>{{i.name}}</strong></h6>
+                    <p class="mb-1"><strong>Created:</strong> {{i.created|date:"d M, Y"}}</p>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{% url 'edit_category' i.id %}" class="btn btn-success btn-sm flex-fill">Edit</a>
+                        <a href="/delete-category/{{i.id}}/" class="btn btn-danger btn-sm flex-fill" onclick="return confirm('Are you sure?')">Delete</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 </div>
 
+<style>
+/* Mobile card styling */
+.card .card-body h6 {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.card .card-body p {
+    font-size: 0.9rem;
+    word-break: break-word;
+}
+
+.btn-sm {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.5rem;
+}
+
+/* Mobile table adjustments */
+@media (max-width: 575px) {
+    table.table th, table.table td {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.5rem;
+    }
+    .btn-sm {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
+</style>
 
 {% endblock %}

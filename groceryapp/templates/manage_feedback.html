@@ -1,71 +1,150 @@
 {% extends 'admin_base.html' %}
-{% block main  %}
+{% block main %}
 
-<div class="card shadow">
-    <div class="card-body">
+<div class="container-fluid py-4">
+    <h4 class="mb-3" style="border-bottom: 2px solid orange; padding-bottom: 5px;">View Feedback</h4>
 
-        <h5 class="p-2" style="border-bottom: 2px solid orange;">View Feedback</h5>
-        <div class="container-fluid">
+    <!-- Desktop Table -->
+    <div class="d-none d-md-block">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped table-sm">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>S.No.</th>
+                                <th>User</th>
+                                <th>Comment</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in feedback %}
+                            <tr id="row-{{forloop.counter}}">
+                                <td>{{forloop.counter}}</td>
+                                <td>{{i.user.first_name}} {{i.user.last_name}}</td>
+                                <td>
+                                    <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#feedbackModal-{{forloop.counter}}">
+                                        View Comment
+                                    </button>
+                                </td>
+                                <td>
+                                    <a href="/delete-feedback/{{i.id}}/" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
 
-            <table class="table table-bordered table-sm" id="example">
-                <thead>
-                <tr>
-                    <th>S.No.</th>
-                    <th>User</th>
-                    <th>View Comment</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for i in feedback %}
-                <tr id="row-{{forloop.counter}}">
-                    <td>{{forloop.counter}}</td>
-                    <td>{{i.user.first_name}} {{i.user.last_name}}</td>
-                    <td>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal-{{forloop.counter}}">
-                          View Comment
-                        </button>
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModal-{{forloop.counter}}" onblur="changeStatus('{{i.id}}', '{{forloop.counter}}', '{{i.status}}')" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">{{i.user.first_name}} {{i.user.last_name}}'s Feedback</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="changeStatus('{{i.id}}', '{{forloop.counter}}', '{{i.status}}')">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <div class="modal-body">
-                                  {{i.message}}
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="changeStatus('{{i.id}}', '{{forloop.counter}}', '{{i.status}}')">Close</button>
-                              </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="feedbackModal-{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel-{{forloop.counter}}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-primary text-white">
+                                            <h5 class="modal-title">{{i.user.first_name}} {{i.user.last_name}}'s Feedback</h5>
+                                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" onclick="markRead('{{i.id}}', '{{forloop.counter}}', '{{i.status}}')">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>{{i.message}}</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" onclick="markRead('{{i.id}}', '{{forloop.counter}}', '{{i.status}}')">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                          </div>
-                        </div>
-                    </td>
-                    <td>
-                        <a href="/delete-feedback/{{i.id}}/" class="text-danger"
-                           onclick="return confirm('Are You Sure?')">Delete</a></td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Mobile Cards -->
+    <div class="d-block d-md-none">
+        {% for i in feedback %}
+            <div class="card mb-3 shadow-sm" id="row-{{forloop.counter}}">
+                <div class="card-body">
+                    <h6 class="mb-2"><strong>{{i.user.first_name}} {{i.user.last_name}}</strong></h6>
+                    <p class="mb-1"><strong>Comment:</strong></p>
+                    <p class="mb-2 text-truncate" style="max-height: 3em; overflow: hidden;">{{i.message}}</p>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button class="btn btn-info btn-sm flex-fill" data-toggle="modal" data-target="#feedbackModalMobile-{{forloop.counter}}">
+                            View Comment
+                        </button>
+                        <a href="/delete-feedback/{{i.id}}/" class="btn btn-danger btn-sm flex-fill" onclick="return confirm('Are you sure?')">
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for mobile -->
+            <div class="modal fade" id="feedbackModalMobile-{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="feedbackModalMobileLabel-{{forloop.counter}}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title">{{i.user.first_name}} {{i.user.last_name}}'s Feedback</h5>
+                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" onclick="markRead('{{i.id}}', '{{forloop.counter}}', '{{i.status}}')">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>{{i.message}}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" onclick="markRead('{{i.id}}', '{{forloop.counter}}', '{{i.status}}')">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
 </div>
+
 <script>
-    function changeStatus(pid, count, status_id){
-        url = '/feedback-read/'+pid+'/';
-        $.get(url, function(data, status){
-            if(status_id == '2'){
-                document.getElementById('row-'+count).style.display = 'none';
-            }
-        })
-    }
+function markRead(feedbackId, rowId, status) {
+    const url = `/feedback-read/${feedbackId}/`;
+    $.get(url, function() {
+        if(status === '2') {
+            const row = document.getElementById('row-' + rowId);
+            if(row) row.style.display = 'none';
+        }
+    });
+}
 </script>
+
+<style>
+/* Card style for mobile cards */
+.card .card-body h6 {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.card .card-body p {
+    font-size: 0.9rem;
+    word-break: break-word;
+}
+
+.btn-sm {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.5rem;
+}
+
+/* Mobile table adjustments */
+@media (max-width: 576px) {
+    table.table th, table.table td {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.5rem;
+    }
+    .btn-sm {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
+</style>
 
 {% endblock %}
